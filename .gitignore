@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+recon-report*.txt
+.pytest_cache/
+.ruff_cache/
+*.jsonl
+lauda-recon-*.json
+*.egg-info/

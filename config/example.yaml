@@ -1,0 +1,54 @@
+# Copy this file and narrow every setting to an explicitly approved scope.
+# The target itself comes from -d/--domain; --authorized is always required.
+
+scope:
+  # Extra explicitly approved hostnames outside the root suffix, if any.
+  include: []
+  # Exclusions always win, including for root-domain subdomains.
+  exclude:
+    - auth.example.com
+
+network:
+  max_workers: 8
+  rate_limit_per_second: 4
+  timeout_seconds: 12
+  ports: [80, 443, 8080, 8443]
+
+# Set only tools installed on the operator machine. Binaries receive curated,
+# shell-free arguments from the runner; provider credentials belong in each
+# upstream tool's documented configuration, never in this file.
+tools:
+  subfinder:
+    enabled: true
+    # binary: C:\Tools\subfinder.exe
+  amass:
+    enabled: true
+  puredns:
+    enabled: true
+  httpx:
+    enabled: true
+  katana:
+    enabled: true
+  gau:
+    enabled: true
+  # Enable only with explicitly authorized repositories below.
+  trufflehog:
+    enabled: false
+
+# PureDNS is optional. Supply a trusted, approved resolver list when enabled.
+# resolvers_file: .\config\trusted-resolvers.txt
+# paths_file: .\config\approved-extra-paths.txt
+
+github:
+  # Name of one environment variable, not a PAT itself. The tool respects
+  # GitHub limits and never rotates tokens to circumvent them.
+  token_env: GITHUB_TOKEN
+  # These scans use `trufflehog git`, including commit history, but retain only
+  # redacted indicators. Add only repositories you are authorized to assess.
+  repositories: []
+
+finding_policy:
+  store_secret_values: false
+  verify_secret_credentials: false
+  verify_takeover_fingerprints: true
+  validate_exposed_file_structure: true
